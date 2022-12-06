@@ -146,6 +146,8 @@ class Chips extends StatelessWidget {
 
   final ChipsController controller;
 
+  static int appBarHeight = 60;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -157,8 +159,9 @@ class Chips extends StatelessWidget {
     // on the value we have stored in the controller. If so,
     // reset the sizes in the controller (which are not observable) and
     // recalculate the chip layout
-    if ((c.currentHeight != MediaQuery.of(context).size.height - (_scaffoldKey.currentState?.appBarMaxHeight ?? 40) - c.padding) || (c.currentWidth != MediaQuery.of(context).size.width - c.padding)) {
-      c.currentHeight = MediaQuery.of(context).size.height - (_scaffoldKey.currentState?.appBarMaxHeight ?? 40) - c.padding;
+    if ((c.currentHeight != MediaQuery.of(context).size.height - (_scaffoldKey.currentState?.appBarMaxHeight ?? appBarHeight) - c.padding) ||
+        (c.currentWidth != MediaQuery.of(context).size.width - c.padding)) {
+      c.currentHeight = MediaQuery.of(context).size.height - (_scaffoldKey.currentState?.appBarMaxHeight ?? appBarHeight) - c.padding;
       c.currentWidth = MediaQuery.of(context).size.width - c.padding;
       c.updateChips();
     }

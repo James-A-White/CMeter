@@ -1,8 +1,0 @@
-version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
-options: "d4d82706bdb9756fdbc0d8d38481d85a5cd8d418eed060f1a130f80be606c1c4"
-build_start_time: [1670157393, 866760969]
-build_end_time: [1670157393, 891109943]
-inputs:
-  "/Users/jameswhite/Desktop/Development.nosync/test/test web/flutter_test_getx/macos/Flutter/GeneratedPluginRegistrant.swift": !private [1670157381, 372928142]
-  "/Users/jameswhite/Desktop/Development.nosync/test/test web/flutter_test_getx/macos/Runner/AppDelegate.swift": !private [1668016546, 0]
-  "/Users/jameswhite/Desktop/Development.nosync/test/test web/flutter_test_getx/macos/Runner/MainFlutterWindow.swift": !private [1668016546, 0]
