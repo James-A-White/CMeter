@@ -28,6 +28,24 @@ class LoginView extends GetView<LoginController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // const Text(
+                  //   'Session ID',
+                  //   style: TextStyle(
+                  //     fontSize: 16,
+                  //   ),
+                  // ),
+                  // TextFormField(
+                  //   controller: c.sessionIdController,
+                  //   decoration: const InputDecoration(
+                  //     labelText: 'Enter Session Id',
+                  //     border: OutlineInputBorder(),
+                  //     isDense: true,
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 12,
+                  // ),
+
                   const Text(
                     'Abbreviation',
                     style: TextStyle(
@@ -45,30 +63,14 @@ class LoginView extends GetView<LoginController> {
                   const SizedBox(
                     height: 12,
                   ),
-                  // const Text(
-                  //   'Password',
-                  //   style: TextStyle(
-                  //     fontSize: 16,
-                  //   ),
-                  // ),
-                  // TextFormField(
-                  //   controller: c.passwordController,
-                  //   decoration: InputDecoration(
-                  //     labelText: 'Enter password',
-                  //     border: const OutlineInputBorder(),
-                  //     isDense: true,
-                  //   ),
-                  // ),
-                  // const SizedBox(
-                  //   height: 24,
-                  // ),
-                  // const SizedBox(
-                  //   height: 24,
-                  // ),
                   ElevatedButton(
-                    onPressed: controller.onLogin,
-                    child: const Text('Register'),
-                  )
+                    onPressed: c.onConnectToSession,
+                    child: const Text('Connect to Session'),
+                  ),
+                  // ElevatedButton(
+                  //   onPressed: c.onUpdateIdentity,
+                  //   child: const Text('Update identity'),
+                  // )
                 ],
               ),
             ),

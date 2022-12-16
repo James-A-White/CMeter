@@ -43,6 +43,8 @@ dependencies:
   uuid: ^3.0.7
   auto_size_text: ^3.0.0
   hexcolor: ^3.0.1
+  hive: ^2.2.3
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

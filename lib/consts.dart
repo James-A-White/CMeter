@@ -1,3 +1,17 @@
+// ignore_for_file: constant_identifier_names
+
+const String BASE_API_URL = 'https://decisionmeter.azurewebsites.net/api/';
+
+const String ERROR_PREFIX = 'CM_ERROR_';
+const String ERROR_KEY_OK_BTN_PRESSED = '${ERROR_PREFIX}OK';
+const String ERROR_KEY_CANCEL_BTN_PRESSED = '${ERROR_PREFIX}CANCEL';
+const String ERROR_HANDLED = '${ERROR_PREFIX}HANDLED';
+const String ERROR_NOT_HANDLED = '${ERROR_PREFIX}NOT_HANDLED';
+const String ERROR_NO_CONNECTION = '${ERROR_PREFIX}NO_CONNECTION';
+const String ERROR_UNKNOWN_HTTP_ERROR = '${ERROR_PREFIX}HTTP_ERROR';
+const String ERROR_UNKNOWN_REMOTE_DB_ERROR = '${ERROR_PREFIX}REMOTE_DB_ERROR';
+const String ERROR_INVITE_CODE_SENT = '${ERROR_PREFIX}INVITE_CODE_SENT';
+
 const List<String> chipColors = <String>[
   '#FFFF0000',
   '#FFFF4007',
