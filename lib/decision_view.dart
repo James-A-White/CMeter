@@ -152,47 +152,62 @@ class DecisionView extends StatelessWidget {
   }
 
   Widget _voteButton(int score) {
-    return GestureDetector(
-      onTap: () async {
-        Box<dynamic> box = Hive.box('CMeter');
-        String stakeholderId = box.get('stakeholderId');
+    return Material(
+      color: HexColor(
+        chipColors[score],
+      ),
+      child: InkWell(
+        splashColor: Colors.blue,
+        hoverColor: Colors.black12,
+        // hoverColor: HexColor(
+        //   chipColors[score],
+        // ),
+        // //overlayColor: const MaterialStatePropertyAll<Color?>(Colors.green),
+        // focusColor: Colors.yellow,
+        highlightColor: Colors.blue,
+        onTap: () async {
+          Box<dynamic> box = Hive.box('CMeter');
+          String stakeholderId = box.get('stakeholderId');
 
-        String accessToken = 'not required';
-        // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
+          String accessToken = 'not required';
+          // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
 
-        final String body = jsonEncode(<String, dynamic>{
-          'tenantId': null,
-          'stakeholderId': stakeholderId,
-          'accessToken': accessToken,
-          'criteriaValueId': null,
-          'criteriaValue': score.toString(),
-          'opinionName': null,
-          'opinionComment': null,
-        });
+          final String body = jsonEncode(<String, dynamic>{
+            'tenantId': null,
+            'stakeholderId': stakeholderId,
+            'accessToken': accessToken,
+            'criteriaValueId': null,
+            'criteriaValue': score.toString(),
+            'opinionName': null,
+            'opinionComment': null,
+          });
 
-        print(body);
+          print(body);
 
-        final String jsonResult = await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
+          final String jsonResult = await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
 
-        Get.showSnackbar(
-          const GetSnackBar(
-            //title: title,
-            message: 'Opinion registered',
-            //icon: const Icon(Icons.refresh),
-            duration: Duration(seconds: 3),
-          ),
-        );
-      },
-      child: AspectRatio(
-        aspectRatio: 1.0,
-        child: Container(
-          margin: const EdgeInsets.all(5),
-          color: HexColor(
-            chipColors[score],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Image.asset('images/numbers/$score.png'),
+          Get.showSnackbar(
+            const GetSnackBar(
+              //title: title,
+              message: 'Opinion registered',
+              //icon: const Icon(Icons.refresh),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        },
+        child: AspectRatio(
+          aspectRatio: 1.0,
+          child: Container(
+            margin: const EdgeInsets.all(5),
+            //color: Colors.pink,
+
+            // HexColor(
+            //   chipColors[score],
+            // ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Image.asset('images/numbers/$score.png'),
+            ),
           ),
         ),
       ),
