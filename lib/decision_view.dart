@@ -168,6 +168,7 @@ class DecisionView extends StatelessWidget {
         onTap: () async {
           Box<dynamic> box = Hive.box('CMeter');
           String stakeholderId = box.get('stakeholderId');
+          String decisionActivityId = box.get('decisionActivityId');
 
           String accessToken = 'not required';
           // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
@@ -176,6 +177,7 @@ class DecisionView extends StatelessWidget {
             'tenantId': null,
             'stakeholderId': stakeholderId,
             'accessToken': accessToken,
+            'decisionActivityId': decisionActivityId,
             'criteriaValueId': null,
             'criteriaValue': score.toString(),
             'opinionName': null,

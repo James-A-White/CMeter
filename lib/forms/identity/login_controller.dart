@@ -126,20 +126,29 @@ class LoginController extends GetxController {
               box.put('decisionActivityId', decisionActivityId);
             }
           }
+
+          Get.showSnackbar(
+            const GetSnackBar(
+              //title: title,
+              message: 'Connected to session',
+              //icon: const Icon(Icons.refresh),
+              duration: Duration(seconds: 3),
+            ),
+          );
+
+          _status.value = RxStatus.success();
+
+          Get.to(DecisionView());
+        } else {
+          Get.showSnackbar(
+            const GetSnackBar(
+              //title: title,
+              message: 'Session not found',
+              //icon: const Icon(Icons.refresh),
+              duration: Duration(seconds: 3),
+            ),
+          );
         }
-
-        Get.showSnackbar(
-          const GetSnackBar(
-            //title: title,
-            message: 'Connected to session',
-            //icon: const Icon(Icons.refresh),
-            duration: Duration(seconds: 3),
-          ),
-        );
-
-        _status.value = RxStatus.success();
-
-        Get.to(DecisionView());
       } catch (e) {
         e.printError();
         //M.showToast(e.toString(), status: SnackBarStatus.error);
@@ -156,38 +165,4 @@ class LoginController extends GetxController {
       }
     }
   }
-
-  // Future<void> onUpdateIdentity() async {
-  //   if (_isRoleValid()) {
-  //     _status.value = RxStatus.loading();
-  //     try {
-  //       //Perform login logic here
-  //       // M.showToast('Login successful', status: SnackBarStatus.success);
-
-  //       Get.showSnackbar(
-  //         const GetSnackBar(
-  //           //title: title,
-  //           message: 'Identity Registered',
-  //           //icon: const Icon(Icons.refresh),
-  //           duration: Duration(seconds: 3),
-  //         ),
-  //       );
-
-  //       _status.value = RxStatus.success();
-  //     } catch (e) {
-  //       e.printError();
-  //       //M.showToast(e.toString(), status: SnackBarStatus.error);
-  //       Get.showSnackbar(
-  //         GetSnackBar(
-  //           //title: title,
-  //           message: e.toString(),
-  //           //icon: const Icon(Icons.refresh),
-  //           duration: const Duration(seconds: 3),
-  //         ),
-  //       );
-
-  //       _status.value = RxStatus.error(e.toString());
-  //     }
-  //   }
-  // }
 }
