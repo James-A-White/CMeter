@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   /// Common
-  static final HexColor accent1 = HexColor('FFE4935D');
+  ///
+  ///
+  static final HexColor accent3 = HexColor('FF773404'); // orange(ish) // Peru Tan
+  static final HexColor accent1 = HexColor('FFE4935D'); // orange(ish) // Di Serria
   static final HexColor accent2 = HexColor('FFBEABA1');
   static final HexColor offWhite = HexColor('FFF8ECE5');
   static final HexColor caption = HexColor('FF7D7873');

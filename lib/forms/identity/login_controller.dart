@@ -3,8 +3,15 @@ import 'package:flutter_test_getx/imports.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  final abbreviationController = TextEditingController();
-  final sessionIdController = TextEditingController();
+  final role1Controller = TextEditingController();
+  final role2Controller = TextEditingController();
+  final sessionCodeController = TextEditingController();
+
+  // final role1FocusNode = FocusNode();
+  // final role2FocusNode = FocusNode();
+  // final sessionCodeFocusNode = FocusNode();
+  // final btnNewSessionFocusNode = FocusNode();
+  // final btnConnectToSessionFocusNode = FocusNode();
 
   //final passwordController = TextEditingController();
   final _status = Rx<RxStatus>(RxStatus.empty());
@@ -27,36 +34,20 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    abbreviationController.dispose();
-    sessionIdController.dispose();
+    role1Controller.dispose();
+    role2Controller.dispose();
+    sessionCodeController.dispose();
     //passwordController.dispose();
   }
 
-  bool _isSessionIdValid() {
-    if ((sessionIdController.text.trim().isEmpty) || (sessionIdController.text.trim().length != 6)) {
-      Get.showSnackbar(
-        const GetSnackBar(
-          //title: title,
-          message: 'Enter valid session ID',
-          //icon: const Icon(Icons.refresh),
-          duration: Duration(seconds: 3),
-        ),
-      );
-
-      return false;
-    }
-
-    return true;
-  }
-
-  bool _isIdentityValid() {
-    if (abbreviationController.text.trim().isEmpty) {
+  bool _isRole1Valid() {
+    if (role1Controller.text.trim().isEmpty) {
       //M.showToast('Enter email id', status: SnackBarStatus.error);
 
       Get.showSnackbar(
         const GetSnackBar(
           //title: title,
-          message: 'Enter identity',
+          message: 'Enter role or your name (max 6 characters)',
           //icon: const Icon(Icons.refresh),
           duration: Duration(seconds: 3),
         ),
@@ -64,110 +55,91 @@ class LoginController extends GetxController {
 
       return false;
     }
-    // if (!abbreviationController.text.trim().isEmail) {
-    //   // M.showToast('Enter valid email id', status: SnackBarStatus.error);
-    //   Get.showSnackbar(
-    //     const GetSnackBar(
-    //       //title: title,
-    //       message: 'Enter valid email',
-    //       //icon: const Icon(Icons.refresh),
-    //       duration: Duration(seconds: 3),
-    //     ),
-    //   );
 
-    //   return false;
-    // }
-    // if (passwordController.text.trim().isEmpty) {
-    //   // M.showToast('Enter password', status: SnackBarStatus.error);
-    //   Get.showSnackbar(
-    //     GetSnackBar(
-    //       //title: title,
-    //       message: 'Enter password',
-    //       //icon: const Icon(Icons.refresh),
-    //       duration: const Duration(seconds: 3),
-    //     ),
-    //   );
-
-    //   return false;
-    // }
     return true;
   }
 
-  Future<void> onConnectToSession() async {
-    //if (_isSessionIdValid()) {
-    _status.value = RxStatus.loading();
-    try {
-      String accessToken = 'not required';
-      // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
-
-      final String body = jsonEncode(<String, dynamic>{
-        'tenantId': null,
-        'stakeholderId': _box.get('stakeholderId'),
-        'accessToken': accessToken,
-        'sessionCode': 'DAC:TNAAGZ',
-        'stakeholderAbbreviation': abbreviationController.text
-      });
-
-      final String jsonResult = await ServiceCommon.sendHttpPost('dm1_connect_to_session', body);
-
-      if (jsonResult.length > 10) {
-        final dynamic jsonItems = json.decode(jsonResult);
-        if (jsonItems.length > 0) {
-          if (jsonItems[0][0]['decisionActivityId'] != null) {
-            String decisionActivityId = jsonItems[0][0]['decisionActivityId'];
-
-            Box<dynamic> box = Hive.box('CMeter');
-            box.put('decisionActivityId', decisionActivityId);
-          }
-        }
-      }
+  bool _isRole2Valid() {
+    if (role2Controller.text.trim().isEmpty) {
+      //M.showToast('Enter email id', status: SnackBarStatus.error);
 
       Get.showSnackbar(
         const GetSnackBar(
           //title: title,
-          message: 'Connected to session',
+          message: 'Enter role or your name (max 6 characters)',
           //icon: const Icon(Icons.refresh),
           duration: Duration(seconds: 3),
         ),
       );
 
-      _status.value = RxStatus.success();
+      return false;
+    }
 
-      Get.to(DecisionView());
-    } catch (e) {
-      e.printError();
-      //M.showToast(e.toString(), status: SnackBarStatus.error);
+    return true;
+  }
+
+  bool _isSessionCodeValid() {
+    RegExp regex = RegExp(r'^[a-zA-Z]+$');
+    bool isNotCharOnly = !regex.hasMatch(sessionCodeController.text.trim());
+
+    if (isNotCharOnly || sessionCodeController.text.trim().length != 6) {
+      // M.showToast('Enter valid email id', status: SnackBarStatus.error);
       Get.showSnackbar(
-        GetSnackBar(
+        const GetSnackBar(
           //title: title,
-          message: e.toString(),
+          message: 'Please enter valid session code',
           //icon: const Icon(Icons.refresh),
-          duration: const Duration(seconds: 3),
+          duration: Duration(seconds: 3),
         ),
       );
 
-      _status.value = RxStatus.error(e.toString());
+      return false;
     }
-    //}
+
+    return true;
   }
 
-  Future<void> onUpdateIdentity() async {
-    if (_isIdentityValid()) {
+  Future<void> onConnectToSession() async {
+    if (_isSessionCodeValid() && _isRole1Valid()) {
       _status.value = RxStatus.loading();
       try {
-        //Perform login logic here
-        // M.showToast('Login successful', status: SnackBarStatus.success);
+        String accessToken = 'not required';
+        // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
+
+        final String body = jsonEncode(<String, dynamic>{
+          'tenantId': null,
+          'stakeholderId': _box.get('stakeholderId'),
+          'accessToken': accessToken,
+          'sessionCode': 'DAC:${sessionCodeController.text.trim().toUpperCase()}',
+          'stakeholderAbbreviation': role1Controller.text
+        });
+
+        final String jsonResult = await ServiceCommon.sendHttpPost('dm1_connect_to_session', body);
+
+        if (jsonResult.length > 10) {
+          final dynamic jsonItems = json.decode(jsonResult);
+          if (jsonItems.length > 0) {
+            if (jsonItems[0][0]['decisionActivityId'] != null) {
+              String decisionActivityId = jsonItems[0][0]['decisionActivityId'];
+
+              Box<dynamic> box = Hive.box('CMeter');
+              box.put('decisionActivityId', decisionActivityId);
+            }
+          }
+        }
 
         Get.showSnackbar(
           const GetSnackBar(
             //title: title,
-            message: 'Identity Registered',
+            message: 'Connected to session',
             //icon: const Icon(Icons.refresh),
             duration: Duration(seconds: 3),
           ),
         );
 
         _status.value = RxStatus.success();
+
+        Get.to(DecisionView());
       } catch (e) {
         e.printError();
         //M.showToast(e.toString(), status: SnackBarStatus.error);
@@ -184,4 +156,38 @@ class LoginController extends GetxController {
       }
     }
   }
+
+  // Future<void> onUpdateIdentity() async {
+  //   if (_isRoleValid()) {
+  //     _status.value = RxStatus.loading();
+  //     try {
+  //       //Perform login logic here
+  //       // M.showToast('Login successful', status: SnackBarStatus.success);
+
+  //       Get.showSnackbar(
+  //         const GetSnackBar(
+  //           //title: title,
+  //           message: 'Identity Registered',
+  //           //icon: const Icon(Icons.refresh),
+  //           duration: Duration(seconds: 3),
+  //         ),
+  //       );
+
+  //       _status.value = RxStatus.success();
+  //     } catch (e) {
+  //       e.printError();
+  //       //M.showToast(e.toString(), status: SnackBarStatus.error);
+  //       Get.showSnackbar(
+  //         GetSnackBar(
+  //           //title: title,
+  //           message: e.toString(),
+  //           //icon: const Icon(Icons.refresh),
+  //           duration: const Duration(seconds: 3),
+  //         ),
+  //       );
+
+  //       _status.value = RxStatus.error(e.toString());
+  //     }
+  //   }
+  // }
 }
