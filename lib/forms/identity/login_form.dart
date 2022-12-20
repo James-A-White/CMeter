@@ -64,8 +64,7 @@ class LoginView extends GetView<LoginController> {
                 //   _fieldFocusChange(context, c.sessionCodeFocusNode, c.role1FocusNode);
                 // },
                 decoration: const InputDecoration(
-                  //labelText: 'Enter session code', //DAC:TNAAGZ DAC:RJIQEZ
-                  labelText: 'Enter code (TNAAGZ/RJIQEZ)', //DAC:TNAAGZ DAC:RJIQEZ
+                  labelText: 'Enter session code',
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black, width: 1.0)),
                   //isDense: true,
                 ),

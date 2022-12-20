@@ -87,7 +87,7 @@ class DecisionView extends StatelessWidget {
     }
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         key: _scaffoldKey,
         appBar: ((c.rows <= 1) && (c.opinionArray.length > 1))
@@ -103,8 +103,10 @@ class DecisionView extends StatelessWidget {
                     color: AppColors.tabHighlighted), //Change background color from here
                 tabs: const <Tab>[
                   // Tab(text: 'Identity', icon: Icon(Icons.manage_accounts)),
+
                   Tab(text: 'Vote', icon: Icon(Icons.how_to_vote)),
                   Tab(text: 'Consensus', icon: Icon(Icons.grid_4x4_sharp)),
+                  Tab(text: 'Session', icon: Icon(Icons.settings_sharp)),
                 ],
               ),
 
@@ -119,6 +121,7 @@ class DecisionView extends StatelessWidget {
           children: [
             _voteTab(),
             Chips(controller: c),
+            _sessionTab(),
           ],
         ),
 
@@ -213,6 +216,24 @@ class DecisionView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _sessionTab() {
+    Box<dynamic> box = Hive.box('CMeter');
+    String sessionCode = box.get('sessionCode');
+
+    return Column(
+      children: <Widget>[
+        const Text(
+          'Session code:',
+          style: TextStyle(fontSize: 36.0),
+        ),
+        Text(
+          sessionCode,
+          style: const TextStyle(fontSize: 48.0),
+        ),
+      ],
     );
   }
 

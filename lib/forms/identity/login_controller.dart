@@ -124,6 +124,7 @@ class LoginController extends GetxController {
 
               Box<dynamic> box = Hive.box('CMeter');
               box.put('decisionActivityId', decisionActivityId);
+              box.put('sessionCode', sessionCodeController.text.trim().toUpperCase());
             }
           }
 
