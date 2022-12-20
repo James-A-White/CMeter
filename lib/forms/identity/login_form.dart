@@ -59,14 +59,9 @@ class LoginView extends GetView<LoginController> {
               width: 200.0,
               child: TextFormField(
                 controller: c.sessionCodeController,
-                // focusNode: c.sessionCodeFocusNode,
-                // onFieldSubmitted: (term) {
-                //   _fieldFocusChange(context, c.sessionCodeFocusNode, c.role1FocusNode);
-                // },
                 decoration: const InputDecoration(
                   labelText: 'Enter session code',
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black, width: 1.0)),
-                  //isDense: true,
                 ),
               ),
             ),
@@ -76,15 +71,10 @@ class LoginView extends GetView<LoginController> {
             SizedBox(
               width: 200.0,
               child: TextFormField(
-                controller: c.role1Controller,
-                // focusNode: c.role1FocusNode,
-                // onFieldSubmitted: (term) {
-                //   _fieldFocusChange(context, c.role1FocusNode, c.btnConnectToSessionFocusNode);
-                // },
+                controller: c.abbreviation1Controller,
                 decoration: const InputDecoration(
                   labelText: 'Enter role (6 char max)',
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black, width: 1.0)),
-                  //isDense: true,
                 ),
               ),
             ),
@@ -93,10 +83,6 @@ class LoginView extends GetView<LoginController> {
             ),
             ElevatedButton(
               onPressed: c.onConnectToSession,
-              // focusNode: c.btnConnectToSessionFocusNode,
-              // onFocusChange: (value) {
-              //   _fieldFocusChange(context, c.btnConnectToSessionFocusNode, c.sessionCodeFocusNode);
-              // },
               child: const Text('Connect to Session'),
             ),
           ],
@@ -153,15 +139,10 @@ class LoginView extends GetView<LoginController> {
             SizedBox(
               width: 200.0,
               child: TextFormField(
-                controller: c.role2Controller,
-                // focusNode: c.role2FocusNode,
-                //               onFieldSubmitted: (term) {
-                //   _fieldFocusChange(context, c.role2FocusNode, c.sessionCodeFocusNode);
-                // },
+                controller: c.abbreviation2Controller,
                 decoration: const InputDecoration(
                   labelText: 'Enter role (6 char max)',
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black, width: 1.0)),
-                  //isDense: true,
                 ),
               ),
             ),
@@ -169,11 +150,7 @@ class LoginView extends GetView<LoginController> {
               height: 12,
             ),
             ElevatedButton(
-              onPressed: c.onConnectToSession,
-              // focusNode: c.btnNewSessionFocusNode,
-              // onFocusChange: (value) {
-              //   _fieldFocusChange(context, c.btnNewSessionFocusNode, c.role2FocusNode);
-              // },
+              onPressed: c.onCreateNewSession,
               child: const Text('Create New Session'),
             ),
           ],

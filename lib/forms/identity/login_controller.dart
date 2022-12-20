@@ -3,8 +3,8 @@ import 'package:flutter_test_getx/imports.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  final role1Controller = TextEditingController();
-  final role2Controller = TextEditingController();
+  final abbreviation1Controller = TextEditingController();
+  final abbreviation2Controller = TextEditingController();
   final sessionCodeController = TextEditingController();
 
   // final role1FocusNode = FocusNode();
@@ -34,14 +34,14 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    role1Controller.dispose();
-    role2Controller.dispose();
+    abbreviation1Controller.dispose();
+    abbreviation2Controller.dispose();
     sessionCodeController.dispose();
     //passwordController.dispose();
   }
 
   bool _isRole1Valid() {
-    if (role1Controller.text.trim().isEmpty) {
+    if (abbreviation1Controller.text.trim().isEmpty) {
       //M.showToast('Enter email id', status: SnackBarStatus.error);
 
       Get.showSnackbar(
@@ -60,7 +60,7 @@ class LoginController extends GetxController {
   }
 
   bool _isRole2Valid() {
-    if (role2Controller.text.trim().isEmpty) {
+    if (abbreviation2Controller.text.trim().isEmpty) {
       //M.showToast('Enter email id', status: SnackBarStatus.error);
 
       Get.showSnackbar(
@@ -111,7 +111,7 @@ class LoginController extends GetxController {
           'stakeholderId': _box.get('stakeholderId'),
           'accessToken': accessToken,
           'sessionCode': 'DAC:${sessionCodeController.text.trim().toUpperCase()}',
-          'stakeholderAbbreviation': role1Controller.text
+          'stakeholderAbbreviation': abbreviation1Controller.text
         });
 
         final String jsonResult = await ServiceCommon.sendHttpPost('dm1_connect_to_session', body);
@@ -125,6 +125,76 @@ class LoginController extends GetxController {
               Box<dynamic> box = Hive.box('CMeter');
               box.put('decisionActivityId', decisionActivityId);
               box.put('sessionCode', sessionCodeController.text.trim().toUpperCase());
+            }
+          }
+
+          Get.showSnackbar(
+            const GetSnackBar(
+              //title: title,
+              message: 'Connected to session',
+              //icon: const Icon(Icons.refresh),
+              duration: Duration(seconds: 3),
+            ),
+          );
+
+          _status.value = RxStatus.success();
+
+          Get.to(DecisionView());
+        } else {
+          Get.showSnackbar(
+            const GetSnackBar(
+              //title: title,
+              message: 'Session not found',
+              //icon: const Icon(Icons.refresh),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      } catch (e) {
+        e.printError();
+        //M.showToast(e.toString(), status: SnackBarStatus.error);
+        Get.showSnackbar(
+          GetSnackBar(
+            //title: title,
+            message: e.toString(),
+            //icon: const Icon(Icons.refresh),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+
+        _status.value = RxStatus.error(e.toString());
+      }
+    }
+  }
+
+  Future<void> onCreateNewSession() async {
+    if (_isRole2Valid()) {
+      _status.value = RxStatus.loading();
+      try {
+        String accessToken = 'not required';
+        // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
+
+        final String body = jsonEncode(<String, dynamic>{
+          'tenantId': null,
+          'stakeholderId': _box.get('stakeholderId'),
+          'stakeholderAbbreviation': abbreviation2Controller.text.trim(),
+          'accessToken': accessToken,
+          'decisionActivityId': null,
+          'decisionActivityName': null,
+        });
+
+        final String jsonResult = await ServiceCommon.sendHttpPost('dm1_create_basic_decision_activity', body);
+
+        if (jsonResult.length > 10) {
+          final dynamic jsonItems = json.decode(jsonResult);
+          if (jsonItems.length > 0) {
+            if (jsonItems[0][0]['decisionActivityId'] != null) {
+              String decisionActivityId = jsonItems[0][0]['decisionActivityId'];
+              String sessionCode = jsonItems[0][0]['sessionCode'];
+
+              Box<dynamic> box = Hive.box('CMeter');
+              box.put('decisionActivityId', decisionActivityId);
+              box.put('sessionCode', sessionCode.trim().toUpperCase());
             }
           }
 

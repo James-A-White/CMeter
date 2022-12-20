@@ -230,7 +230,7 @@ class DecisionView extends StatelessWidget {
           style: TextStyle(fontSize: 36.0),
         ),
         Text(
-          sessionCode,
+          sessionCode.replaceAll('DAC:', ''),
           style: const TextStyle(fontSize: 48.0),
         ),
       ],
