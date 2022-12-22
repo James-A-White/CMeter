@@ -7,6 +7,8 @@ import 'package:flutter_test_getx/imports.dart';
 void main() async {
   AppColors ac = AppColors();
 
+  Uri xUri = Uri.base;
+
   await Hive.openBox('CMeter');
   Box<dynamic> box = Hive.box('CMeter');
 
@@ -19,8 +21,19 @@ void main() async {
 
   return runApp(
     GetMaterialApp(
-      home: const LoginView(),
+      //home: const LoginView(),
       theme: ac.toThemeData(),
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => const LoginForm()),
+        GetPage(name: '/da', page: () => const ConnectByUrlForm()),
+        // GetPage(name: '/second', page: () => Second()),
+        // GetPage(
+        //   name: '/third',
+        //   page: () => Third(),
+        //   transition: Transition.zoom
+        // ),
+      ],
     ),
   );
 }

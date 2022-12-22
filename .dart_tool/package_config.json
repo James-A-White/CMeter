@@ -338,6 +338,18 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "qr",
+      "rootUri": "file:///Users/jameswhite/Desktop/Development.nosync/flutter/.pub-cache/hosted/pub.dartlang.org/qr-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "qr_flutter",
+      "rootUri": "file:///Users/jameswhite/Desktop/Development.nosync/flutter/.pub-cache/hosted/pub.dartlang.org/qr_flutter-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "shelf",
       "rootUri": "file:///Users/jameswhite/Desktop/Development.nosync/flutter/.pub-cache/hosted/pub.dartlang.org/shelf-1.4.0",
       "packageUri": "lib/",
@@ -458,7 +470,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-12-20T08:59:34.645647Z",
+  "generated": "2022-12-22T22:28:56.542075Z",
   "generator": "pub",
   "generatorVersion": "2.18.5"
 }

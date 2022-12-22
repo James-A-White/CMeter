@@ -3,8 +3,10 @@ file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/.dart_tool/f
 file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/.dart_tool/package_config.json
 file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/consts.dart
 file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/decision_view.dart
-file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/forms/identity/login_controller.dart
-file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/forms/identity/login_form.dart
+file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/forms/entry_pages/connect_by_url_controller.dart
+file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/forms/entry_pages/connect_by_url_form.dart
+file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/forms/entry_pages/login_controller.dart
+file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/forms/entry_pages/login_form.dart
 file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/hive_keys.dart
 file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/imports.dart
 file:///Users/jameswhite/Desktop/Development.nosync/Projects/CMeter/lib/main.dart
