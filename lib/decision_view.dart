@@ -187,9 +187,7 @@ class DecisionView extends StatelessWidget {
             'opinionComment': null,
           });
 
-          print(body);
-
-          final String jsonResult = await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
+          await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
 
           Get.showSnackbar(
             const GetSnackBar(
@@ -232,6 +230,15 @@ class DecisionView extends StatelessWidget {
         Text(
           sessionCode.replaceAll('DAC:', ''),
           style: const TextStyle(fontSize: 48.0),
+        ),
+        QrImage(
+          data: 'https://cmeter.azureedge.net/#/da/${sessionCode.replaceAll('DAC:', '')}',
+          version: QrVersions.auto,
+          size: 200.0,
+        ),
+        Text(
+          'https://cmeter.azureedge.net/#/da/${sessionCode.replaceAll('DAC:', '')}',
+          style: const TextStyle(fontSize: 32.0),
         ),
       ],
     );
