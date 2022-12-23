@@ -155,61 +155,64 @@ class DecisionView extends StatelessWidget {
   }
 
   Widget _voteButton(int score) {
-    return Material(
-      color: HexColor(
-        chipColors[score],
-      ),
-      child: InkWell(
-        splashColor: Colors.blue,
-        hoverColor: Colors.black12,
-        // hoverColor: HexColor(
-        //   chipColors[score],
-        // ),
-        // //overlayColor: const MaterialStatePropertyAll<Color?>(Colors.green),
-        // focusColor: Colors.yellow,
-        highlightColor: Colors.blue,
-        onTap: () async {
-          Box<dynamic> box = Hive.box('CMeter');
-          String stakeholderId = box.get('stakeholderId');
-          String decisionActivityId = box.get('decisionActivityId');
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Material(
+        color: HexColor(
+          chipColors[score],
+        ),
+        child: InkWell(
+          splashColor: Colors.blue,
+          hoverColor: Colors.black12,
+          // hoverColor: HexColor(
+          //   chipColors[score],
+          // ),
+          // //overlayColor: const MaterialStatePropertyAll<Color?>(Colors.green),
+          // focusColor: Colors.yellow,
+          highlightColor: Colors.blue,
+          onTap: () async {
+            Box<dynamic> box = Hive.box('CMeter');
+            String stakeholderId = box.get('stakeholderId');
+            String decisionActivityId = box.get('decisionActivityId');
 
-          String accessToken = 'not required';
-          // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
+            String accessToken = 'not required';
+            // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
 
-          final String body = jsonEncode(<String, dynamic>{
-            'tenantId': null,
-            'stakeholderId': stakeholderId,
-            'accessToken': accessToken,
-            'decisionActivityId': decisionActivityId,
-            'criteriaValueId': null,
-            'criteriaValue': score.toString(),
-            'opinionName': null,
-            'opinionComment': null,
-          });
+            final String body = jsonEncode(<String, dynamic>{
+              'tenantId': null,
+              'stakeholderId': stakeholderId,
+              'accessToken': accessToken,
+              'decisionActivityId': decisionActivityId,
+              'criteriaValueId': null,
+              'criteriaValue': score.toString(),
+              'opinionName': null,
+              'opinionComment': null,
+            });
 
-          await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
+            await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
 
-          Get.showSnackbar(
-            const GetSnackBar(
-              //title: title,
-              message: 'Opinion registered',
-              //icon: const Icon(Icons.refresh),
-              duration: Duration(seconds: 3),
-            ),
-          );
-        },
-        child: AspectRatio(
-          aspectRatio: 1.0,
-          child: Container(
-            margin: const EdgeInsets.all(5),
-            //color: Colors.pink,
+            Get.showSnackbar(
+              const GetSnackBar(
+                //title: title,
+                message: 'Opinion registered',
+                //icon: const Icon(Icons.refresh),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          },
+          child: AspectRatio(
+            aspectRatio: 1.0,
+            child: Container(
+              margin: const EdgeInsets.all(5),
+              //color: Colors.pink,
 
-            // HexColor(
-            //   chipColors[score],
-            // ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Image.asset('images/numbers/$score.png'),
+              // HexColor(
+              //   chipColors[score],
+              // ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset('images/numbers/$score.png'),
+              ),
             ),
           ),
         ),
@@ -221,71 +224,80 @@ class DecisionView extends StatelessWidget {
     Box<dynamic> box = Hive.box('CMeter');
     String sessionCode = box.get('sessionCode');
 
-    return Column(
-      children: <Widget>[
-        const Text(
-          'Session code:',
-          style: TextStyle(fontSize: 36.0),
+    return Padding(
+      padding: const EdgeInsets.all(25.0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            const Text(
+              'Session code:',
+              style: TextStyle(fontSize: 36.0),
+            ),
+            Text(
+              sessionCode.replaceAll('DAC:', ''),
+              style: const TextStyle(fontSize: 48.0),
+            ),
+            QrImage(
+              data: 'https://www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}',
+              version: QrVersions.auto,
+              size: 200.0,
+            ),
+            AutoSizeText(
+              'www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}',
+              maxLines: 1,
+              style: const TextStyle(fontSize: 32.0),
+            ),
+          ],
         ),
-        Text(
-          sessionCode.replaceAll('DAC:', ''),
-          style: const TextStyle(fontSize: 48.0),
-        ),
-        QrImage(
-          data: 'https://cmeter.azureedge.net/#/da/${sessionCode.replaceAll('DAC:', '')}',
-          version: QrVersions.auto,
-          size: 200.0,
-        ),
-        Text(
-          'https://cmeter.azureedge.net/#/da/${sessionCode.replaceAll('DAC:', '')}',
-          style: const TextStyle(fontSize: 32.0),
-        ),
-      ],
+      ),
     );
   }
 
   Widget _voteTab() {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _voteButton(0),
-            ],
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _voteButton(0),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _voteButton(1),
-              _voteButton(2),
-              _voteButton(3),
-            ],
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _voteButton(1),
+                _voteButton(2),
+                _voteButton(3),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _voteButton(4),
-              _voteButton(5),
-              _voteButton(6),
-            ],
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _voteButton(4),
+                _voteButton(5),
+                _voteButton(6),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _voteButton(7),
-              _voteButton(8),
-              _voteButton(9),
-            ],
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _voteButton(7),
+                _voteButton(8),
+                _voteButton(9),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
