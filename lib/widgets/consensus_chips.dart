@@ -41,7 +41,6 @@ class ChipsController extends GetxController {
       num a1 = _calculateOverallChipArea(currentHeight, currentWidth, r);
       num a2 = _calculateOverallChipArea(currentHeight, currentWidth, r + 1);
 
-      print('${opinionArray.length}($r): $a1 - $a2');
       // if the total area of the chips for rows = n+1 is greater
       // than the total area of chips for rows = n then keep going
       if ((a1 <= a2) && (a1 != double.minPositive)) {

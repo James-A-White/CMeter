@@ -14,7 +14,6 @@ class DecisionViewController extends GetxController {
       const Duration(milliseconds: 5000),
       (Timer tm) async {
         final List<OpinionModel> opinions = <OpinionModel>[];
-        RxStatus status = RxStatus.empty();
 
         Box<dynamic> box = Hive.box('CMeter');
         String? decisionActivityId = box.get('decisionActivityId');
@@ -27,7 +26,6 @@ class DecisionViewController extends GetxController {
           final String jsonResult = await ServiceCommon.sendHttpPost('dm1_get_decision_activity_opinion', body);
 
           opinions.clear();
-          print(jsonResult);
 
           if (jsonResult.length > 10) {
             final dynamic jsonItems = json.decode(jsonResult);
@@ -35,9 +33,7 @@ class DecisionViewController extends GetxController {
               if ((jsonItems[1] as List<dynamic>).isNotEmpty) {
                 for (int i = 0; i < (jsonItems[1] as List<dynamic>).length; i++) {
                   OpinionModel om = OpinionModel.fromJson(jsonItems[1][i]);
-                  print(om.toString());
                   opinions.add(om);
-                  status = RxStatus.success();
                 }
               }
             }
@@ -54,13 +50,6 @@ class DecisionViewController extends GetxController {
 
 class DecisionView extends GetView<DecisionViewController> {
   const DecisionView({super.key});
-
-  //final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final Uuid _uuid = const Uuid();
-
-  //final RxList<OpinionModel> chipArray = <OpinionModel>[].obs;
-
-  // final Random _random = Random();
 
   @override
   Widget build(context) {
@@ -118,7 +107,7 @@ class DecisionView extends GetView<DecisionViewController> {
         // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
         body: TabBarView(
           children: [
-            _voteTab(),
+            _voteTab(c),
             Chips(controller: c),
             _sessionTab(),
           ],
@@ -153,54 +142,53 @@ class DecisionView extends GetView<DecisionViewController> {
     );
   }
 
-  Widget _voteButton(int score) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-        color: HexColor(
-          chipColors[score],
-        ),
-        child: InkWell(
-          splashColor: Colors.blue,
-          hoverColor: Colors.black12,
-          // hoverColor: HexColor(
-          //   chipColors[score],
-          // ),
-          // //overlayColor: const MaterialStatePropertyAll<Color?>(Colors.green),
-          // focusColor: Colors.yellow,
-          highlightColor: Colors.blue,
-          onTap: () async {
-            Box<dynamic> box = Hive.box('CMeter');
-            String stakeholderId = box.get('stakeholderId');
-            String decisionActivityId = box.get('decisionActivityId');
+  Widget _voteButton(int score, ChipsController c) {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.all(c.currentHeight / 200.0),
+        child: Material(
+          color: HexColor(
+            chipColors[score],
+          ),
+          child: InkWell(
+            splashColor: Colors.blue,
+            hoverColor: Colors.black12,
+            // hoverColor: HexColor(
+            //   chipColors[score],
+            // ),
+            // //overlayColor: const MaterialStatePropertyAll<Color?>(Colors.green),
+            // focusColor: Colors.yellow,
+            highlightColor: Colors.blue,
+            onTap: () async {
+              Box<dynamic> box = Hive.box('CMeter');
+              String stakeholderId = box.get('stakeholderId');
+              String decisionActivityId = box.get('decisionActivityId');
 
-            String accessToken = 'not required';
-            // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
+              String accessToken = 'not required';
+              // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
 
-            final String body = jsonEncode(<String, dynamic>{
-              'tenantId': null,
-              'stakeholderId': stakeholderId,
-              'accessToken': accessToken,
-              'decisionActivityId': decisionActivityId,
-              'criteriaValueId': null,
-              'criteriaValue': score.toString(),
-              'opinionName': null,
-              'opinionComment': null,
-            });
+              final String body = jsonEncode(<String, dynamic>{
+                'tenantId': null,
+                'stakeholderId': stakeholderId,
+                'accessToken': accessToken,
+                'decisionActivityId': decisionActivityId,
+                'criteriaValueId': null,
+                'criteriaValue': score.toString(),
+                'opinionName': null,
+                'opinionComment': null,
+              });
 
-            await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
+              await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
 
-            Get.showSnackbar(
-              const GetSnackBar(
-                //title: title,
-                message: 'Opinion registered',
-                //icon: const Icon(Icons.refresh),
-                duration: Duration(seconds: 3),
-              ),
-            );
-          },
-          child: AspectRatio(
-            aspectRatio: 1.0,
+              Get.showSnackbar(
+                const GetSnackBar(
+                  //title: title,
+                  message: 'Opinion registered',
+                  //icon: const Icon(Icons.refresh),
+                  duration: Duration(seconds: 3),
+                ),
+              );
+            },
             child: Container(
               margin: const EdgeInsets.all(5),
               //color: Colors.pink,
@@ -209,7 +197,7 @@ class DecisionView extends GetView<DecisionViewController> {
               //   chipColors[score],
               // ),
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(c.currentHeight / 200.0),
                 child: Image.asset('images/numbers/$score.png'),
               ),
             ),
@@ -228,18 +216,25 @@ class DecisionView extends GetView<DecisionViewController> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            const Text(
+            const AutoSizeText(
               'Session code:',
               style: TextStyle(fontSize: 36.0),
+              maxLines: 1,
+              minFontSize: 8.0,
             ),
-            Text(
+            AutoSizeText(
               sessionCode.replaceAll('DAC:', ''),
               style: const TextStyle(fontSize: 48.0),
+              maxLines: 1,
+              minFontSize: 8.0,
             ),
-            QrImage(
-              data: 'https://www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}',
-              version: QrVersions.auto,
-              size: 200.0,
+            SizedBox(
+              width: 200,
+              child: QrImage(
+                data: 'https://www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}',
+                version: QrVersions.auto,
+                //size: 200.0,
+              ),
             ),
             AutoSizeText(
               'www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}',
@@ -253,16 +248,20 @@ class DecisionView extends GetView<DecisionViewController> {
     );
   }
 
-  Widget _voteTab() {
+  Widget _voteTab(ChipsController c) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _voteButton(0),
+                const Expanded(child: SizedBox()),
+                _voteButton(0, c),
+                const Expanded(child: SizedBox()),
               ],
             ),
           ),
@@ -270,9 +269,9 @@ class DecisionView extends GetView<DecisionViewController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _voteButton(1),
-                _voteButton(2),
-                _voteButton(3),
+                _voteButton(1, c),
+                _voteButton(2, c),
+                _voteButton(3, c),
               ],
             ),
           ),
@@ -280,9 +279,9 @@ class DecisionView extends GetView<DecisionViewController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _voteButton(4),
-                _voteButton(5),
-                _voteButton(6),
+                _voteButton(4, c),
+                _voteButton(5, c),
+                _voteButton(6, c),
               ],
             ),
           ),
@@ -290,12 +289,13 @@ class DecisionView extends GetView<DecisionViewController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _voteButton(7),
-                _voteButton(8),
-                _voteButton(9),
+                _voteButton(7, c),
+                _voteButton(8, c),
+                _voteButton(9, c),
               ],
             ),
           ),
+          //const Expanded(child: SizedBox())
         ],
       ),
     );

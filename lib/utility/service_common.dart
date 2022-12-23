@@ -9,8 +9,6 @@ class ServiceCommon {
   static Future<String> sendHttpPost(String procName, String requestBody, {Function? errorCallback}) async {
     final String uri = BASE_API_URL + procName;
 
-    print(uri);
-
     final Response response = await post(Uri.parse(uri),
             headers: <String, String>{
               'content-type': 'application/json',

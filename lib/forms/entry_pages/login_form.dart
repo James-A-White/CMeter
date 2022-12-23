@@ -160,9 +160,4 @@ class LoginForm extends GetView<LoginController> {
 
     return widgets;
   }
-
-  _fieldFocusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
-    currentFocus.unfocus();
-    FocusScope.of(context).requestFocus(nextFocus);
-  }
 }

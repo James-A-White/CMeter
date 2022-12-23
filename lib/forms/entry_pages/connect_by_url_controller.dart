@@ -109,7 +109,7 @@ class ConnectByUrlController extends GetxController {
 
           _status.value = RxStatus.success();
 
-          Get.to(DecisionView());
+          Get.to(const DecisionView());
         } else {
           Get.showSnackbar(
             const GetSnackBar(

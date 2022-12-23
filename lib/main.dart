@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:consensus_meter/models/opinion_model/opinion_model.dart';
 import 'package:get/get.dart';
 
 import 'package:consensus_meter/imports.dart';
 
 void main() async {
   AppColors ac = AppColors();
-
-  Uri xUri = Uri.base;
 
   await Hive.openBox('CMeter');
   Box<dynamic> box = Hive.box('CMeter');
