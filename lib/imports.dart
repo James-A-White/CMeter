@@ -5,7 +5,6 @@ export 'dart:io';
 export 'dart:math';
 export 'dart:typed_data';
 
-export 'package:async/async.dart';
 export 'package:auto_size_text/auto_size_text.dart';
 export 'package:consensus_meter/styles/colors.dart';
 export 'package:consensus_meter/widgets/consensus_chips.dart';
