@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test_getx/models/opinion_model/opinion_model.dart';
+import 'package:consensus_meter/models/opinion_model/opinion_model.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter_test_getx/imports.dart';
+import 'package:consensus_meter/imports.dart';
 
 void main() async {
   AppColors ac = AppColors();
@@ -27,6 +27,7 @@ void main() async {
       getPages: [
         GetPage(name: '/', page: () => const LoginForm()),
         GetPage(name: '/da', page: () => const ConnectByUrlForm()),
+        GetPage(name: '/DecisionView', page: () => const DecisionView()),
         // GetPage(name: '/second', page: () => Second()),
         // GetPage(
         //   name: '/third',

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_test_getx">
+    package="com.example.consensus_meter">
    <application
-        android:label="flutter_test_getx"
+        android:label="consensus_meter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

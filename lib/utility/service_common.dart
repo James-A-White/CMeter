@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:flutter_test_getx/imports.dart';
+import 'package:consensus_meter/imports.dart';
 
 class ServiceCommon {
   // the variable below is there to suppress a warning about defining classes with only static members

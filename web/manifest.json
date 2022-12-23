@@ -1,6 +1,6 @@
 {
-    "name": "flutter_test_getx",
-    "short_name": "flutter_test_getx",
+    "name": "consensus_meter",
+    "short_name": "consensus_meter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

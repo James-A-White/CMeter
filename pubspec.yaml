@@ -1,5 +1,5 @@
-name: flutter_test_getx
-description: A new Flutter project.
+name: consensus_meter
+description: ConsensusMeter, the heart of DecisionHall
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -21,6 +21,7 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
+  flutter: ^3.3.10
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions

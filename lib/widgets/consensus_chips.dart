@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_test_getx/imports.dart';
-import 'package:flutter_test_getx/models/opinion_model/opinion_model.dart';
+import 'package:consensus_meter/imports.dart';
+import 'package:consensus_meter/models/opinion_model/opinion_model.dart';
 import 'package:get/get.dart';
 
 class ChipsController extends GetxController {
@@ -140,33 +140,32 @@ class ChipsController extends GetxController {
 }
 
 class Chips extends StatelessWidget {
-  Chips({
+  const Chips({
     required this.controller,
     super.key,
   });
 
   final ChipsController controller;
 
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  //final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(context) {
     // Instantiate your class using Get.put() to make it available for all "child" routes there.
     final ChipsController c = Get.put(ChipsController());
 
-    int appBarHeight = 60;
+    // int appBarHeight = 60;
 
-    if ((c.rows <= 1) && (c.opinionArray.length > 1)) {
-      appBarHeight = 0;
-    }
+    // if ((c.rows <= 1) && (c.opinionArray.length > 1)) {
+    //   appBarHeight = 0;
+    // }
 
     // check to see if the size of the display has changed based
     // on the value we have stored in the controller. If so,
     // reset the sizes in the controller (which are not observable) and
     // recalculate the chip layout
-    if ((c.currentHeight != MediaQuery.of(context).size.height - (_scaffoldKey.currentState?.appBarMaxHeight ?? appBarHeight) - c.padding) ||
-        (c.currentWidth != MediaQuery.of(context).size.width - c.padding)) {
-      c.currentHeight = MediaQuery.of(context).size.height - (_scaffoldKey.currentState?.appBarMaxHeight ?? appBarHeight) - c.padding;
+    if ((c.currentHeight != MediaQuery.of(context).size.height - (AppBar().preferredSize.height) - c.padding) || (c.currentWidth != MediaQuery.of(context).size.width - c.padding)) {
+      c.currentHeight = MediaQuery.of(context).size.height - (AppBar().preferredSize.height) - c.padding;
       c.currentWidth = MediaQuery.of(context).size.width - c.padding;
       c.updateChips();
     }

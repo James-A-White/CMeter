@@ -1,4 +1,4 @@
-# flutter_test_getx
+# consensus_meter
 
 A new Flutter project.
 

@@ -3,7 +3,7 @@
 // package importss
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_test_getx/imports.dart';
+import 'package:consensus_meter/imports.dart';
 
 part 'opinion_set_model.freezed.dart';
 part 'opinion_set_model.g.dart';

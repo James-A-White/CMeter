@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_test_getx/imports.dart';
+import 'package:consensus_meter/imports.dart';
 import 'package:get/get.dart';
 
 class ConnectByUrlController extends GetxController {

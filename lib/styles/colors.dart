@@ -1,4 +1,4 @@
-import 'package:flutter_test_getx/imports.dart';
+import 'package:consensus_meter/imports.dart';
 import 'package:flutter/material.dart';
 
 class AppColors {

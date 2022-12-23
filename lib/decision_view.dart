@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test_getx/models/opinion_model/opinion_model.dart';
+import 'package:consensus_meter/models/opinion_model/opinion_model.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter_test_getx/imports.dart';
+import 'package:consensus_meter/imports.dart';
 
 class DecisionViewController extends GetxController {
   static DecisionViewController get to => Get.find(); // add this line
@@ -52,15 +52,15 @@ class DecisionViewController extends GetxController {
   }
 }
 
-class DecisionView extends StatelessWidget {
-  DecisionView({super.key});
+class DecisionView extends GetView<DecisionViewController> {
+  const DecisionView({super.key});
 
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  //final _scaffoldKey = GlobalKey<ScaffoldState>();
   final Uuid _uuid = const Uuid();
 
   //final RxList<OpinionModel> chipArray = <OpinionModel>[].obs;
 
-  final Random _random = Random();
+  // final Random _random = Random();
 
   @override
   Widget build(context) {
@@ -80,8 +80,8 @@ class DecisionView extends StatelessWidget {
     // on the value we have stored in the controller. If so,
     // reset the sizes in the controller (which are not observable) and
     // recalculate the chip layout
-    if ((c.currentHeight != MediaQuery.of(context).size.height - (_scaffoldKey.currentState?.appBarMaxHeight ?? 0)) || (c.currentWidth != MediaQuery.of(context).size.width)) {
-      c.currentHeight = MediaQuery.of(context).size.height - (_scaffoldKey.currentState?.appBarMaxHeight ?? 0);
+    if ((c.currentHeight != MediaQuery.of(context).size.height - (AppBar().preferredSize.height)) || (c.currentWidth != MediaQuery.of(context).size.width)) {
+      c.currentHeight = MediaQuery.of(context).size.height - (AppBar().preferredSize.height);
       c.currentWidth = MediaQuery.of(context).size.width;
       ChipsController.to.updateChips();
     }
@@ -89,7 +89,6 @@ class DecisionView extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        key: _scaffoldKey,
         appBar: ((c.rows <= 1) && (c.opinionArray.length > 1))
             ? null
             : TabBar(
@@ -245,6 +244,7 @@ class DecisionView extends StatelessWidget {
             AutoSizeText(
               'www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}',
               maxLines: 1,
+              minFontSize: 6.0,
               style: const TextStyle(fontSize: 32.0),
             ),
           ],
