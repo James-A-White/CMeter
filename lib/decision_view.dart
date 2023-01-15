@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:consensus_meter/models/opinion_model/opinion_model.dart';
 import 'package:get/get.dart';
 
@@ -133,32 +134,6 @@ class DecisionView extends GetView<DecisionViewController> {
             _sessionTab(),
           ],
         ),
-
-        // floatingActionButton:
-        // Column(
-        //   children: <Widget>[
-        //     FloatingActionButton(
-        //         onPressed: () {
-        //           final int score = _random.nextInt(10);
-        //           chipArray.add(ChipModel(
-        //             opinionRating: score,
-        //             chipId: _uuid.v1().toString(),
-        //             chipColor: chipColors[score],
-        //             textColor: chipTextColors[score],
-        //             chipText: sampleStrings[chipArray.length % 10],
-        //           ));
-        //           //c.chipArray = chipArray;
-        //           c.updateChips(chips: chipArray);
-        //         },
-        //         child: const Icon(Icons.add)),
-        //     // FloatingActionButton(
-        //     //     onPressed: () {
-        //     //       chipArray.removeAt(0);
-        //     //       c.updateChips(chips: chipArray);
-        //     //     },
-        //     //     child: const Icon(Icons.highlight_off))
-        //   ],
-        // )
       ),
     );
   }
@@ -269,12 +244,34 @@ class DecisionView extends GetView<DecisionViewController> {
               maxLines: 1,
               minFontSize: 8.0,
             ),
-            AutoSizeText(
-              sessionCode.replaceAll('DAC:', ''),
-              style: const TextStyle(fontSize: 48.0),
-              maxLines: 1,
-              minFontSize: 8.0,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SelectableText(
+                    sessionCode.replaceAll('DAC:', ''),
+                    style: const TextStyle(fontSize: 48.0),
+                    maxLines: 1,
+                  ),
+                  GestureDetector(
+                    child: const Icon(Icons.copy, size: 48.0),
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: sessionCode.replaceAll('DAC:', '')));
+                      Get.showSnackbar(
+                        const GetSnackBar(
+                          //title: title,
+                          message: 'Session code copied to clipboard',
+                          //icon: const Icon(Icons.refresh),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
+
             SizedBox(
               width: 200,
               child: QrImage(
@@ -283,12 +280,41 @@ class DecisionView extends GetView<DecisionViewController> {
                 //size: 200.0,
               ),
             ),
-            AutoSizeText(
-              'www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}',
-              maxLines: 1,
-              minFontSize: 6.0,
-              style: const TextStyle(fontSize: 32.0),
+
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SelectableText(
+                    'www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}',
+                    maxLines: 1,
+                    style: const TextStyle(fontSize: 32.0),
+                  ),
+                  GestureDetector(
+                    child: const Icon(Icons.copy, size: 32.0),
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: 'www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}'));
+                      Get.showSnackbar(
+                        const GetSnackBar(
+                          //title: title,
+                          message: 'URL copied to clipboard',
+                          //icon: const Icon(Icons.refresh),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
+
+            // AutoSizeText(
+            //   'www.consensusmeter.com/#/da/${sessionCode.replaceAll('DAC:', '')}',
+            //   maxLines: 1,
+            //   minFontSize: 6.0,
+            //   style: const TextStyle(fontSize: 32.0),
+            // ),
           ],
         ),
       ),

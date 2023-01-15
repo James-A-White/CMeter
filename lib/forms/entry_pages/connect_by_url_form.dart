@@ -77,10 +77,18 @@ class ConnectByUrlForm extends GetView<ConnectByUrlController> {
             const SizedBox(
               height: 12,
             ),
-            ElevatedButton(
-              onPressed: c.onConnectToSession,
-              child: const Text('Connect to Session'),
-            ),
+            Obx(() => c.status.value.isLoading
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: AppColors.accent2,
+                    ),
+                  )
+                : ElevatedButton(
+                    onPressed: c.onConnectToSession,
+                    child: const Text('Connect to Session'),
+                  )),
           ],
         ),
       ),

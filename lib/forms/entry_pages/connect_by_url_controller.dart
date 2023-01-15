@@ -6,11 +6,9 @@ class ConnectByUrlController extends GetxController {
   final abbreviation1Controller = TextEditingController();
   String sessionCode = '';
 
-  final _status = Rx<RxStatus>(RxStatus.empty());
+  Rx<RxStatus> status = Rx<RxStatus>(RxStatus.empty());
 
   static ConnectByUrlController get to => Get.find(); // add this line
-
-  RxStatus get status => _status.value;
 
   final Box<dynamic> _box = Hive.box('CMeter');
 
@@ -71,7 +69,7 @@ class ConnectByUrlController extends GetxController {
 
   Future<void> onConnectToSession() async {
     if (_isSessionCodeValid() && _isRole1Valid()) {
-      _status.value = RxStatus.loading();
+      status.value = RxStatus.loading();
       try {
         String accessToken = 'not required';
         // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
@@ -107,7 +105,7 @@ class ConnectByUrlController extends GetxController {
             ),
           );
 
-          _status.value = RxStatus.success();
+          status.value = RxStatus.success();
 
           Get.to(const DecisionView());
         } else {
@@ -143,7 +141,7 @@ class ConnectByUrlController extends GetxController {
           ),
         );
 
-        _status.value = RxStatus.error(e.toString());
+        status.value = RxStatus.error(e.toString());
       }
     }
   }
