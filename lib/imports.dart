@@ -15,7 +15,7 @@ export 'package:consensus_meter/forms/entry_pages/login_controller.dart';
 export 'package:consensus_meter/forms/entry_pages/connect_by_url_form.dart';
 export 'package:consensus_meter/forms/entry_pages/connect_by_url_controller.dart';
 export 'package:consensus_meter/hive_keys.dart';
-export 'package:consensus_meter/models/chip_model/chip_model.dart';
+export 'package:consensus_meter/models/decision_model/decision_model.dart';
 export 'package:consensus_meter/utility/service_common.dart';
 export 'package:hexcolor/hexcolor.dart';
 export 'package:hive/hive.dart';

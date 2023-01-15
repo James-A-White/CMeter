@@ -86,7 +86,7 @@ class ConnectByUrlController extends GetxController {
 
         final String jsonResult = await ServiceCommon.sendHttpPost('dm1_connect_to_session', body);
 
-        if (jsonResult.length > 10) {
+        if ((jsonResult.length > 10) && (!jsonResult.startsWith(ERROR_PREFIX))) {
           final dynamic jsonItems = json.decode(jsonResult);
           if (jsonItems.length > 0) {
             if (jsonItems[0][0]['decisionActivityId'] != null) {
@@ -111,14 +111,25 @@ class ConnectByUrlController extends GetxController {
 
           Get.to(const DecisionView());
         } else {
-          Get.showSnackbar(
-            const GetSnackBar(
-              //title: title,
-              message: 'Session not found',
-              //icon: const Icon(Icons.refresh),
-              duration: Duration(seconds: 3),
-            ),
-          );
+          if (jsonResult.startsWith(ERROR_PREFIX)) {
+            Get.showSnackbar(
+              const GetSnackBar(
+                //title: title,
+                message: 'Network error',
+                //icon: const Icon(Icons.refresh),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          } else {
+            Get.showSnackbar(
+              const GetSnackBar(
+                //title: title,
+                message: 'Session not found',
+                //icon: const Icon(Icons.refresh),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
         }
       } catch (e) {
         e.printError();

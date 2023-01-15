@@ -14,6 +14,7 @@ class DecisionViewController extends GetxController {
       const Duration(milliseconds: 5000),
       (Timer tm) async {
         final List<OpinionModel> opinions = <OpinionModel>[];
+        DecisionModel? dm;
 
         Box<dynamic> box = Hive.box('CMeter');
         String? decisionActivityId = box.get('decisionActivityId');
@@ -27,9 +28,11 @@ class DecisionViewController extends GetxController {
 
           opinions.clear();
 
-          if (jsonResult.length > 10) {
+          if ((jsonResult.length > 10) && (!jsonResult.startsWith(ERROR_PREFIX))) {
             final dynamic jsonItems = json.decode(jsonResult);
             if (jsonItems.length > 0) {
+              dm = DecisionModel.fromJson(jsonItems[0][0]);
+
               if ((jsonItems[1] as List<dynamic>).isNotEmpty) {
                 for (int i = 0; i < (jsonItems[1] as List<dynamic>).length; i++) {
                   OpinionModel om = OpinionModel.fromJson(jsonItems[1][i]);
@@ -37,11 +40,29 @@ class DecisionViewController extends GetxController {
                 }
               }
             }
+          } else {
+            if (jsonResult.startsWith(ERROR_PREFIX)) {
+              Get.showSnackbar(
+                const GetSnackBar(
+                  //title: title,
+                  message: 'Network error',
+                  //icon: const Icon(Icons.refresh),
+                  duration: Duration(seconds: 3),
+                ),
+              );
+            } else {
+              Get.showSnackbar(
+                const GetSnackBar(
+                  //title: title,
+                  message: 'Error receiving data from session',
+                  //icon: const Icon(Icons.refresh),
+                  duration: Duration(seconds: 3),
+                ),
+              );
+            }
           }
 
-          final ChipsController c = ChipsController.to;
-
-          c.updateChips(chips: opinions);
+          ChipsController.to.updateChips(decision: dm, chips: opinions);
         }
       },
     );
@@ -178,16 +199,42 @@ class DecisionView extends GetView<DecisionViewController> {
                 'opinionComment': null,
               });
 
-              await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
+              String jsonResult = await ServiceCommon.sendHttpPost('dm1_register_opinion', body);
 
-              Get.showSnackbar(
-                const GetSnackBar(
-                  //title: title,
-                  message: 'Opinion registered',
-                  //icon: const Icon(Icons.refresh),
-                  duration: Duration(seconds: 3),
-                ),
-              );
+              if ((jsonResult.length > 10) && (!jsonResult.startsWith(ERROR_PREFIX))) {
+                final dynamic jsonItems = json.decode(jsonResult);
+
+                Get.showSnackbar(
+                  GetSnackBar(
+                    //title: title,
+                    message: jsonItems[0][0]['result'],
+                    //icon: const Icon(Icons.refresh),
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+
+                Get.to(const DecisionView());
+              } else {
+                if (jsonResult.startsWith(ERROR_PREFIX)) {
+                  Get.showSnackbar(
+                    const GetSnackBar(
+                      //title: title,
+                      message: 'Network error',
+                      //icon: const Icon(Icons.refresh),
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
+                } else {
+                  Get.showSnackbar(
+                    const GetSnackBar(
+                      //title: title,
+                      message: 'Session not found',
+                      //icon: const Icon(Icons.refresh),
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
+                }
+              }
             },
             child: Container(
               margin: const EdgeInsets.all(5),

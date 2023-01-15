@@ -14,11 +14,10 @@ class LoginController extends GetxController {
   // final btnConnectToSessionFocusNode = FocusNode();
 
   //final passwordController = TextEditingController();
-  final _status = Rx<RxStatus>(RxStatus.empty());
+  final status = Rx<RxStatus>(RxStatus.empty());
+  bool isNewSession = true;
 
   static LoginController get to => Get.find(); // add this line
-
-  RxStatus get status => _status.value;
 
   final Box<dynamic> _box = Hive.box('CMeter');
 
@@ -101,7 +100,8 @@ class LoginController extends GetxController {
 
   Future<void> onConnectToSession() async {
     if (_isSessionCodeValid() && _isRole1Valid()) {
-      _status.value = RxStatus.loading();
+      isNewSession = false;
+      status.value = RxStatus.loading();
       try {
         String accessToken = 'not required';
         // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
@@ -116,7 +116,7 @@ class LoginController extends GetxController {
 
         final String jsonResult = await ServiceCommon.sendHttpPost('dm1_connect_to_session', body);
 
-        if (jsonResult.length > 10) {
+        if ((jsonResult.length > 10) && (!jsonResult.startsWith(ERROR_PREFIX))) {
           final dynamic jsonItems = json.decode(jsonResult);
           if (jsonItems.length > 0) {
             if (jsonItems[0][0]['decisionActivityId'] != null) {
@@ -137,18 +137,31 @@ class LoginController extends GetxController {
             ),
           );
 
-          _status.value = RxStatus.success();
+          status.value = RxStatus.success();
 
-          Get.to(const DecisionView());
+          //Get.to(const DecisionView());
+
+          Get.off(() => const DecisionView());
         } else {
-          Get.showSnackbar(
-            const GetSnackBar(
-              //title: title,
-              message: 'Session not found',
-              //icon: const Icon(Icons.refresh),
-              duration: Duration(seconds: 3),
-            ),
-          );
+          if (jsonResult.startsWith(ERROR_PREFIX)) {
+            Get.showSnackbar(
+              const GetSnackBar(
+                //title: title,
+                message: 'Network error',
+                //icon: const Icon(Icons.refresh),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          } else {
+            Get.showSnackbar(
+              const GetSnackBar(
+                //title: title,
+                message: 'Session not found',
+                //icon: const Icon(Icons.refresh),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
         }
       } catch (e) {
         e.printError();
@@ -162,14 +175,15 @@ class LoginController extends GetxController {
           ),
         );
 
-        _status.value = RxStatus.error(e.toString());
+        status.value = RxStatus.error(e.toString());
       }
     }
   }
 
   Future<void> onCreateNewSession() async {
     if (_isRole2Valid()) {
-      _status.value = RxStatus.loading();
+      isNewSession = true;
+      status.value = RxStatus.loading();
       try {
         String accessToken = 'not required';
         // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
@@ -185,7 +199,7 @@ class LoginController extends GetxController {
 
         final String jsonResult = await ServiceCommon.sendHttpPost('dm1_create_basic_decision_activity', body);
 
-        if (jsonResult.length > 10) {
+        if ((jsonResult.length > 10) && (!jsonResult.startsWith(ERROR_PREFIX))) {
           final dynamic jsonItems = json.decode(jsonResult);
           if (jsonItems.length > 0) {
             if (jsonItems[0][0]['decisionActivityId'] != null) {
@@ -207,18 +221,29 @@ class LoginController extends GetxController {
             ),
           );
 
-          _status.value = RxStatus.success();
+          status.value = RxStatus.success();
 
-          Get.to(const DecisionView());
+          Get.off(() => const DecisionView());
         } else {
-          Get.showSnackbar(
-            const GetSnackBar(
-              //title: title,
-              message: 'Session not found',
-              //icon: const Icon(Icons.refresh),
-              duration: Duration(seconds: 3),
-            ),
-          );
+          if (jsonResult.startsWith(ERROR_PREFIX)) {
+            Get.showSnackbar(
+              const GetSnackBar(
+                //title: title,
+                message: 'Network error',
+                //icon: const Icon(Icons.refresh),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          } else {
+            Get.showSnackbar(
+              const GetSnackBar(
+                //title: title,
+                message: 'Session not found',
+                //icon: const Icon(Icons.refresh),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
         }
       } catch (e) {
         e.printError();
@@ -232,7 +257,7 @@ class LoginController extends GetxController {
           ),
         );
 
-        _status.value = RxStatus.error(e.toString());
+        status.value = RxStatus.error(e.toString());
       }
     }
   }

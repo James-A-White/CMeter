@@ -81,10 +81,18 @@ class LoginForm extends GetView<LoginController> {
             const SizedBox(
               height: 12,
             ),
-            ElevatedButton(
-              onPressed: c.onConnectToSession,
-              child: const Text('Connect to Session'),
-            ),
+            Obx(() => (c.status.value.isLoading && !c.isNewSession)
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: AppColors.accent2,
+                    ),
+                  )
+                : ElevatedButton(
+                    onPressed: c.status.value.isLoading && c.isNewSession ? null : c.onConnectToSession,
+                    child: const Text('Connect to Session'),
+                  ))
           ],
         ),
       ),
@@ -149,10 +157,18 @@ class LoginForm extends GetView<LoginController> {
             const SizedBox(
               height: 12,
             ),
-            ElevatedButton(
-              onPressed: c.onCreateNewSession,
-              child: const Text('Create New Session'),
-            ),
+            Obx(() => (c.status.value.isLoading && c.isNewSession)
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: AppColors.accent2,
+                    ),
+                  )
+                : ElevatedButton(
+                    onPressed: c.status.value.isLoading && !c.isNewSession ? null : c.onCreateNewSession,
+                    child: const Text('Create New Session'),
+                  ))
           ],
         ),
       ),

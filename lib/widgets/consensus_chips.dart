@@ -9,6 +9,7 @@ class ChipsController extends GetxController {
 
   List<OpinionModel> opinionArray = <OpinionModel>[];
   RxList<RxList<OpinionModel>> rowArray = <RxList<OpinionModel>>[].obs;
+  RxString question = ''.obs;
 
   RxNum sideLength = RxNum(0);
   int rows = 0;
@@ -16,7 +17,8 @@ class ChipsController extends GetxController {
   num currentHeight = -1;
   num currentWidth = -1;
 
-  int padding = 20;
+  final int padding = 20;
+  final int _titlePadding = 80;
 
   /// this method takes the size of the display area
   /// and calculates the chip layout parameters, such
@@ -27,8 +29,9 @@ class ChipsController extends GetxController {
   /// adding a row. The optimal number of rows is
   /// that number of rows where the total area of all
   /// chips is maximum.
-  void updateChips({List<OpinionModel>? chips}) {
+  void updateChips({DecisionModel? decision, List<OpinionModel>? chips}) {
     int r = 1; // start analyzing based on a single row of chips
+    int tp = 0;
 
     if (chips == null) {
       chips = opinionArray;
@@ -36,10 +39,18 @@ class ChipsController extends GetxController {
       opinionArray = chips;
     }
 
+    if (decision != null) {
+      question.value = decision.decisionQuestion;
+    }
+
+    if (question.value.isNotEmpty) {
+      tp = _titlePadding;
+    }
+
     // iterate through different numbers of rows
     while (true) {
-      num a1 = _calculateOverallChipArea(currentHeight, currentWidth, r);
-      num a2 = _calculateOverallChipArea(currentHeight, currentWidth, r + 1);
+      num a1 = _calculateOverallChipArea(currentHeight - tp, currentWidth, r);
+      num a2 = _calculateOverallChipArea(currentHeight - tp, currentWidth, r + 1);
 
       // if the total area of the chips for rows = n+1 is greater
       // than the total area of chips for rows = n then keep going
@@ -65,7 +76,7 @@ class ChipsController extends GetxController {
     // chips in a row divided by the width, or the height of the
     // display divided by the number of rows.
     num sideLengthWidth = currentWidth / maxChipsInRow;
-    num sideLengthHeight = currentHeight / r;
+    num sideLengthHeight = (currentHeight - tp) / r;
 
     // set this in the observable variable
     sideLength = RxNum(math.min(sideLengthHeight, sideLengthWidth));
@@ -171,51 +182,69 @@ class Chips extends StatelessWidget {
 
     return Obx(
       () => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List<Widget>.generate(
-          c.rowArray.length,
-          (index) => Row(
+        children: [
+          if (c.question.value.isNotEmpty) ...<Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15.0),
+              child: AutoSizeText(
+                c.question.value,
+                style: const TextStyle(
+                  fontFamily: 'AvenirNextBold',
+                  fontSize: 30,
+                  color: Colors.black,
+                ),
+                maxLines: 1,
+              ),
+            ),
+          ],
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              c.rowArray[index].length,
-              (index2) => Container(
-                height: c.sideLength.value.toDouble(),
-                width: c.sideLength.value.toDouble(),
-                decoration: BoxDecoration(border: Border.all(color: Colors.white), color: HexColor(c.rowArray[index][index2].criteriaValueBackgroundColor)),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 60,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Image.asset('images/numbers/${c.rowArray[index][index2].criteriaValueText}.png'),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 40,
-                        child: Container(
-                          padding: const EdgeInsets.only(bottom: 3.0),
-                          child: AutoSizeText(
-                            c.rowArray[index][index2].stakeholderAbbreviation ?? '',
-                            maxFontSize: 500,
-                            minFontSize: 10,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontFamily: 'AvenirNextHeavy',
-                              fontSize: 500,
-                              color: Colors.black,
+            children: List<Widget>.generate(
+              c.rowArray.length,
+              (index) => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  c.rowArray[index].length,
+                  (index2) => Container(
+                    height: c.sideLength.value.toDouble(),
+                    width: c.sideLength.value.toDouble(),
+                    decoration: BoxDecoration(border: Border.all(color: Colors.white), color: HexColor(c.rowArray[index][index2].criteriaValueBackgroundColor)),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 60,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Image.asset('images/numbers/${c.rowArray[index][index2].criteriaValueText}.png'),
                             ),
                           ),
-                        ),
+                          Expanded(
+                            flex: 40,
+                            child: Container(
+                              padding: const EdgeInsets.only(bottom: 3.0),
+                              child: AutoSizeText(
+                                c.rowArray[index][index2].stakeholderAbbreviation ?? '',
+                                maxFontSize: 500,
+                                minFontSize: 10,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontFamily: 'AvenirNextHeavy',
+                                  fontSize: 500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
