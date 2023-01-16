@@ -7,7 +7,8 @@
         {
             "name": "CMeter",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": ["-d", "chrome","--web-port", "50000"],
         },
         {
             "name": "CMeter (profile mode)",
@@ -21,25 +22,5 @@
             "type": "dart",
             "flutterMode": "release"
         },
-        {
-            "name": "get_test",
-            "cwd": "get_test",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "get_test (profile mode)",
-            "cwd": "get_test",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "get_test (release mode)",
-            "cwd": "get_test",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
     ]
 }

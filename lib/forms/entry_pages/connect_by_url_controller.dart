@@ -74,6 +74,10 @@ class ConnectByUrlController extends GetxController {
         String accessToken = 'not required';
         // final String accessToken = Utilities.generateToken(HC_ADMIN_PORTAL_INTERNAL_USER_ID, 'hcportal_getEvents');
 
+        const Uuid uuid = Uuid();
+        String stakeholderId = uuid.v4().toString();
+        _box.put('stakeholderId', stakeholderId);
+
         final String body = jsonEncode(<String, dynamic>{
           'tenantId': null,
           'stakeholderId': _box.get('stakeholderId'),
@@ -107,7 +111,7 @@ class ConnectByUrlController extends GetxController {
 
           status.value = RxStatus.success();
 
-          Get.to(const DecisionView());
+          Get.off(() => const DecisionView());
         } else {
           if (jsonResult.startsWith(ERROR_PREFIX)) {
             Get.showSnackbar(
